@@ -191,7 +191,6 @@
     const dt = new Date();
     document.getElementById("datetime").textContent = dt.toLocaleString();
 
-    // Факты
     const facts = [
       "Каждый гражданин полирует.",
       "В Альянсе запрещено жужелица.",
@@ -205,7 +204,6 @@
       factIndex = (factIndex + 1) % facts.length;
     }, 8000);
 
-    // Слайд-шоу
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
     setInterval(() => {
