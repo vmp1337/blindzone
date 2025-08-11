@@ -123,11 +123,14 @@
 
     setInterval(swapBackgrounds, 8000);
 
+    // Закомментирована функция, чтобы НЕ менять текст serverName
+    /*
     function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
       serverNameElement.textContent = servername;
       mapNameElement.textContent = mapname;
       playerCountElement.textContent = `0/${maxplayers}`;
     }
+    */
 
     function SetStatusChanged(status) {
       statusElement.textContent = status;
