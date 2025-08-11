@@ -9,7 +9,7 @@
 <style>
   body, html {
     margin: 0; padding: 0; height: 100%;
-    background-color: #1a202c; /* tailwind gray-900 */
+    background-color: #1a202c;
     overflow: hidden;
   }
   .bg-slider {
@@ -25,7 +25,6 @@
   .bg-slider.visible {
     opacity: 0.25;
   }
-  /* Основной контейнер поверх фонов */
   .content {
     position: relative;
     z-index: 10;
@@ -41,6 +40,15 @@
   }
   .glow-text {
     text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+  }
+  .copyright {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    color: #6b7280;
+    font-size: 0.875rem;
   }
 </style>
 </head>
@@ -87,9 +95,7 @@
     </div>
   </div>
 
-  <div class="absolute bottom-4 text-gray-500 text-sm" style="z-index: 10;">
-    © 2025 BloodShed Local | У нас нет прав :(
-  </div>
+  <div class="copyright">© 2025 BloodShed Local | У нас нет прав :(</div>
 
   <script>
     const bg1 = document.getElementById('bg1');
@@ -104,37 +110,26 @@
     ];
 
     let current = 0;
-    let visibleBg = bg1; // как bg1 или bg2 — текущий видимый
+    let visibleBg = bg1;
     let hiddenBg = bg2;
 
-    // Устанавливаем начальное состояние
     visibleBg.style.backgroundImage = `url(${images[current]})`;
     visibleBg.classList.add('visible');
 
     function switchBackground() {
-      // Следующая картинка
       current = (current + 1) % images.length;
-
-      // Скрытый слой меняем картинку
       hiddenBg.style.backgroundImage = `url(${images[current]})`;
-
-      // Начинаем переход: делаем скрытый слой видимым, а видимый — прозрачным
       hiddenBg.classList.add('visible');
       visibleBg.classList.remove('visible');
-
-      // Через 2 секунды (длительность transition) меняем ссылки местами
       setTimeout(() => {
-        // Обмениваем переменные местами
         const temp = visibleBg;
         visibleBg = hiddenBg;
         hiddenBg = temp;
       }, 2000);
     }
 
-    // Запускаем цикл смены каждые 8 секунд: 6 секунд показ + 2 секунды переход
     setInterval(switchBackground, 8000);
 
-    // Остальной JS (таймер, прогресс, подсказки)
     const progressBar = document.getElementById('progress');
     const statusElement = document.getElementById('status');
     const substatusElement = document.getElementById('substatus');
