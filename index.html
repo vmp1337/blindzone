@@ -1,172 +1,166 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>СИСЬКИ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .animate-pulse {
-            animation: pulse 2s infinite;
-        }
-        .progress-bar {
-            transition: width 0.3s ease;
-        }
-        .glow-text {
-            text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
-        }
-        /* Фон под слайдер */
-        .bg-slider {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.2;
-            filter: blur(8px);
-            transition: background-image 1s ease-in-out;
-            z-index: 0;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>СИСЬКИ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  @keyframes pulse {
+    0%,100% {opacity:1;}
+    50% {opacity:0.5;}
+  }
+  .animate-pulse {
+    animation: pulse 2s infinite;
+  }
+  .progress-bar {
+    transition: width 0.3s ease;
+  }
+  .glow-text {
+    text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+  }
+  .bg-slider {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    filter: blur(4px);
+    transition: opacity 1.5s ease-in-out;
+    z-index: 0;
+  }
+  .bg-slider.fade-out {
+    opacity: 0;
+  }
+</style>
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden relative">
-    <div class="bg-slider"></div>
+  <div id="bg1" class="bg-slider"></div>
+  <div id="bg2" class="bg-slider"></div>
 
-    <div class="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center">
-        <!-- Логотип сервера -->
-        <div class="mb-8 text-center">
-            <div class="text-6xl font-bold mb-2 glow-text">
-                <span class="text-red-600">Blood</span><span class="text-white">Shed</span>
-            </div>
-            <div class="text-3xl text-gray-300 font-bold tracking-wider" id="server-name">LOCAL</div>
-        </div>
-        
-        <!-- Прогресс бар -->
-        <div class="w-full bg-gray-700 rounded-full h-4 mb-6 overflow-hidden">
-            <div id="progress" class="progress-bar h-full bg-gradient-to-r from-red-600 to-red-800 rounded-full" style="width: 0%"></div>
-        </div>
-        
-        <!-- Статус загрузки -->
-        <div class="text-center mb-8">
-            <div id="status" class="text-xl font-semibold mb-2">Инициализация сервера...</div>
-            <div id="substatus" class="text-gray-300">Пожалуйста, подождите</div>
-        </div>
-        
-        <!-- Индикатор загрузки -->
-        <div class="flex space-x-2 mb-10">
-            <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div>
-            <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse" style="animation-delay: 0.2s"></div>
-            <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse" style="animation-delay: 0.4s"></div>
-        </div>
-        
-        <!-- Информация о сервере -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-center">
-            <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
-                <div class="text-red-600 mb-1"><i class="fas fa-users"></i> Игроки</div>
-                <div id="player-count" class="text-2xl font-bold">0/0</div>
-            </div>
-            <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
-                <div class="text-red-600 mb-1"><i class="fas fa-map"></i> Карта</div>
-                <div id="map-name" class="text-2xl font-bold">Неизвестно</div>
-            </div>
-            <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
-                <div class="text-red-600 mb-1"><i class="fas fa-clock"></i> Время</div>
-                <div id="server-time" class="text-2xl font-bold">00:00</div>
-            </div>
-        </div>
-        
-        <!-- Подсказки -->
-        <div class="mt-10 text-gray-400 text-sm text-center max-w-lg">
-            <div id="hint" class="italic">Нажмите F1 для открытия меню помощи</div>
-        </div>
+  <div class="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center">
+    <div class="mb-8 text-center">
+      <div class="text-6xl font-bold mb-2 glow-text">
+        <span class="text-red-600">Blood</span><span class="text-white">Shed</span>
+      </div>
+      <div class="text-3xl text-gray-300 font-bold tracking-wider" id="server-name">LOCAL</div>
     </div>
-    
-    <!-- Копирайт -->
-    <div class="absolute bottom-4 text-gray-500 text-sm">
-        © 2025 BloodShed Local | У нас нет прав :(
+    <div class="w-full bg-gray-700 rounded-full h-4 mb-6 overflow-hidden">
+      <div id="progress" class="progress-bar h-full bg-gradient-to-r from-red-600 to-red-800 rounded-full" style="width: 0%"></div>
     </div>
+    <div class="text-center mb-8">
+      <div id="status" class="text-xl font-semibold mb-2">Инициализация сервера...</div>
+      <div id="substatus" class="text-gray-300">Пожалуйста, подождите</div>
+    </div>
+    <div class="flex space-x-2 mb-10">
+      <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div>
+      <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse" style="animation-delay: 0.2s"></div>
+      <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse" style="animation-delay: 0.4s"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-center">
+      <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
+        <div class="text-red-600 mb-1"><i class="fas fa-users"></i> Игроки</div>
+        <div id="player-count" class="text-2xl font-bold">0/0</div>
+      </div>
+      <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
+        <div class="text-red-600 mb-1"><i class="fas fa-map"></i> Карта</div>
+        <div id="map-name" class="text-2xl font-bold">Неизвестно</div>
+      </div>
+      <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
+        <div class="text-red-600 mb-1"><i class="fas fa-clock"></i> Время</div>
+        <div id="server-time" class="text-2xl font-bold">00:00</div>
+      </div>
+    </div>
+    <div class="mt-10 text-gray-400 text-sm text-center max-w-lg">
+      <div id="hint" class="italic">Нажмите F1 для открытия меню помощи</div>
+    </div>
+  </div>
+  <div class="absolute bottom-4 text-gray-500 text-sm">© 2025 BloodShed Local | У нас нет прав :(</div>
 
-    <script>
-        const progressBar = document.getElementById('progress');
-        const statusElement = document.getElementById('status');
-        const substatusElement = document.getElementById('substatus');
-        const hintElement = document.getElementById('hint');
-        const playerCountElement = document.getElementById('player-count');
-        const mapNameElement = document.getElementById('map-name');
-        const serverTimeElement = document.getElementById('server-time');
-        const serverNameElement = document.getElementById('server-name');
-        const bgDiv = document.querySelector('.bg-slider');
+  <script>
+    const progressBar = document.getElementById('progress');
+    const statusElement = document.getElementById('status');
+    const substatusElement = document.getElementById('substatus');
+    const hintElement = document.getElementById('hint');
+    const playerCountElement = document.getElementById('player-count');
+    const mapNameElement = document.getElementById('map-name');
+    const serverTimeElement = document.getElementById('server-time');
+    const serverNameElement = document.getElementById('server-name');
+    const bg1 = document.getElementById('bg1');
+    const bg2 = document.getElementById('bg2');
 
-        const hints = [
-            "Нажмите F1 для открытия настроек",
-            "Нажмите F2 для внутриигрового магазина",
-            "Нажмите Q для меню действий"
-        ];
+    const hints = [
+      "Нажмите F1 для открытия настроек",
+      "Нажмите F2 для внутриигрового магазина",
+      "Нажмите Q для меню действий"
+    ];
 
-        // Картинки из папки img с именами 1.png - 5.png
-        const images = [
-          "img/1.png",
-          "img/2.png",
-          "img/3.png",
-          "img/4.png",
-          "img/5.png"
-        ];
+    const images = [
+      "img/1.png",
+      "img/2.png",
+      "img/3.png",
+      "img/4.png",
+      "img/5.png"
+    ];
 
-        let currentImage = 0;
+    let current = 0, next = 1;
+    bg1.style.backgroundImage = `url(${images[current]})`;
+    bg2.style.backgroundImage = `url(${images[next]})`;
+    bg2.classList.add('fade-out');
 
-        function changeBackground() {
-            if(images.length === 0) return;
-            bgDiv.style.backgroundImage = `url(${images[currentImage]})`;
-            currentImage = (currentImage + 1) % images.length;
-        }
-        setInterval(changeBackground, 8000);
-        changeBackground();
+    function swapBackgrounds() {
+      bg1.classList.toggle('fade-out');
+      bg2.classList.toggle('fade-out');
+      current = (current + 1) % images.length;
+      next = (next + 1) % images.length;
+      if(bg1.classList.contains('fade-out')) {
+        bg1.style.backgroundImage = `url(${images[next]})`;
+      } else {
+        bg2.style.backgroundImage = `url(${images[next]})`;
+      }
+    }
 
-        // GMod API: реальные данные
-        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
-            serverNameElement.textContent = servername;
-            mapNameElement.textContent = mapname;
-            playerCountElement.textContent = `0/${maxplayers}`;
-        }
+    setInterval(swapBackgrounds, 8000);
 
-        function SetStatusChanged(status) {
-            statusElement.textContent = status;
-        }
+    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+      serverNameElement.textContent = servername;
+      mapNameElement.textContent = mapname;
+      playerCountElement.textContent = `0/${maxplayers}`;
+    }
 
-        function SetFilesNeeded(needed) {
-            substatusElement.textContent = `Осталось файлов: ${needed}`;
-        }
+    function SetStatusChanged(status) {
+      statusElement.textContent = status;
+    }
 
-        function SetFilesTotal(total) {
-            substatusElement.textContent = `Всего файлов: ${total}`;
-        }
+    function SetFilesNeeded(needed) {
+      substatusElement.textContent = `Осталось файлов: ${needed}`;
+    }
 
-        function DownloadingFile(fileName) {
-            substatusElement.textContent = `Загрузка: ${fileName}`;
-        }
+    function SetFilesTotal(total) {
+      substatusElement.textContent = `Всего файлов: ${total}`;
+    }
 
-        function SetProgress(amount) {
-            progressBar.style.width = `${amount * 100}%`;
-        }
+    function DownloadingFile(fileName) {
+      substatusElement.textContent = `Загрузка: ${fileName}`;
+    }
 
-        // Обновление времени
-        function updateServerTime() {
-            const now = new Date();
-            serverTimeElement.textContent =
-                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-        }
-        setInterval(updateServerTime, 1000);
-        updateServerTime();
+    function SetProgress(amount) {
+      progressBar.style.width = `${amount * 100}%`;
+    }
 
-        // Смена подсказок каждые 5 сек
-        setInterval(() => {
-            const randomHint = hints[Math.floor(Math.random() * hints.length)];
-            hintElement.textContent = randomHint;
-        }, 5000);
-    </script>
+    function updateServerTime() {
+      const now = new Date();
+      serverTimeElement.textContent =
+        `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    }
+
+    setInterval(() => {
+      hintElement.textContent = hints[Math.floor(Math.random() * hints.length)];
+    }, 5000);
+
+    setInterval(updateServerTime, 1000);
+    updateServerTime();
+  </script>
 </body>
 </html>
