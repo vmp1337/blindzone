@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>СИСЬКИ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -20,11 +20,22 @@
         .glow-text {
             text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
         }
+        /* Фон под слайдер */
+        .bg-slider {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            filter: blur(8px);
+            transition: background-image 1s ease-in-out;
+            z-index: 0;
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20 blur-sm"></div>
-    
+<body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden relative">
+    <div class="bg-slider"></div>
+
     <div class="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center">
         <!-- Логотип сервера -->
         <div class="mb-8 text-center">
@@ -88,12 +99,32 @@
         const mapNameElement = document.getElementById('map-name');
         const serverTimeElement = document.getElementById('server-time');
         const serverNameElement = document.getElementById('server-name');
+        const bgDiv = document.querySelector('.bg-slider');
 
         const hints = [
             "Нажмите F1 для открытия настроек",
             "Нажмите F2 для внутриигрового магазина",
             "Нажмите Q для меню действий"
         ];
+
+        // Картинки из папки img с именами 1.png - 5.png
+        const images = [
+          "img/1.png",
+          "img/2.png",
+          "img/3.png",
+          "img/4.png",
+          "img/5.png"
+        ];
+
+        let currentImage = 0;
+
+        function changeBackground() {
+            if(images.length === 0) return;
+            bgDiv.style.backgroundImage = `url(${images[currentImage]})`;
+            currentImage = (currentImage + 1) % images.length;
+        }
+        setInterval(changeBackground, 8000);
+        changeBackground();
 
         // GMod API: реальные данные
         function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
@@ -139,4 +170,3 @@
     </script>
 </body>
 </html>
-
