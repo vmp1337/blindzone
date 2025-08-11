@@ -33,14 +33,6 @@
   .bg-slider.fade-out {
     opacity: 0;
   }
-  .bottom-text {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #6b7280;
-    font-size: 0.875rem;
-  }
 </style>
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden relative">
@@ -84,7 +76,7 @@
       <div id="hint" class="italic">Нажмите F1 для открытия меню помощи</div>
     </div>
   </div>
-  <div class="bottom-text">© 2025 BloodShed Local | У нас нет прав :(</div>
+  <div class="absolute bottom-4 text-gray-500 text-sm">© 2025 BloodShed Local | У нас нет прав :(</div>
 
   <script>
     const progressBar = document.getElementById('progress');
@@ -131,16 +123,10 @@
 
     setInterval(swapBackgrounds, 8000);
 
-    // Эта функция вызывается игрой и передает реальные данные
-    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode, playersnow) {
+    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
       serverNameElement.textContent = servername;
       mapNameElement.textContent = mapname;
-      // Заменяем рандом на реальные данные игроков
-      if (typeof playersnow !== "undefined") {
-        playerCountElement.textContent = `${playersnow}/${maxplayers}`;
-      } else {
-        playerCountElement.textContent = `0/${maxplayers}`;
-      }
+      playerCountElement.textContent = `0/${maxplayers}`;
     }
 
     function SetStatusChanged(status) {
@@ -178,4 +164,3 @@
   </script>
 </body>
 </html>
-
