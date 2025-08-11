@@ -7,57 +7,47 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    background-color: #1a202c;
-    overflow: hidden;
+  @keyframes pulse {
+    0%,100% {opacity:1;}
+    50% {opacity:0.5;}
   }
-  .bg-slider {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-size: cover;
-    background-position: center;
-    filter: blur(3px);
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-    z-index: 0;
+  .animate-pulse {
+    animation: pulse 2s infinite;
   }
-  .bg-slider.visible {
-    opacity: 0.25;
-  }
-  .content {
-    position: relative;
-    z-index: 10;
-    height: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
+  .progress-bar {
+    transition: width 0.3s ease;
   }
   .glow-text {
     text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
   }
-  .copyright {
-    position: fixed;
+  .bg-slider {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    filter: blur(4px);
+    transition: opacity 1.5s ease-in-out;
+    z-index: 0;
+  }
+  .bg-slider.fade-out {
+    opacity: 0;
+  }
+  .bottom-text {
+    position: absolute;
     bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10;
     color: #6b7280;
     font-size: 0.875rem;
   }
 </style>
 </head>
-<body>
-
+<body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden relative">
   <div id="bg1" class="bg-slider"></div>
   <div id="bg2" class="bg-slider"></div>
 
-  <div class="content">
+  <div class="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center">
     <div class="mb-8 text-center">
       <div class="text-6xl font-bold mb-2 glow-text">
         <span class="text-red-600">Blood</span><span class="text-white">Shed</span>
@@ -94,12 +84,25 @@
       <div id="hint" class="italic">Нажмите F1 для открытия меню помощи</div>
     </div>
   </div>
-
-  <div class="copyright">© 2025 BloodShed Local | У нас нет прав :(</div>
+  <div class="bottom-text">© 2025 BloodShed Local | У нас нет прав :(</div>
 
   <script>
+    const progressBar = document.getElementById('progress');
+    const statusElement = document.getElementById('status');
+    const substatusElement = document.getElementById('substatus');
+    const hintElement = document.getElementById('hint');
+    const playerCountElement = document.getElementById('player-count');
+    const mapNameElement = document.getElementById('map-name');
+    const serverTimeElement = document.getElementById('server-time');
+    const serverNameElement = document.getElementById('server-name');
     const bg1 = document.getElementById('bg1');
     const bg2 = document.getElementById('bg2');
+
+    const hints = [
+      "Нажмите F1 для открытия настроек",
+      "Нажмите F2 для внутриигрового магазина",
+      "Нажмите Q для меню действий"
+    ];
 
     const images = [
       "img/1.png",
@@ -109,41 +112,30 @@
       "img/5.png"
     ];
 
-    let current = 0;
-    let visibleBg = bg1;
-    let hiddenBg = bg2;
+    let current = 0, next = 1;
+    bg1.style.backgroundImage = `url(${images[current]})`;
+    bg2.style.backgroundImage = `url(${images[next]})`;
+    bg2.classList.add('fade-out');
 
-    visibleBg.style.backgroundImage = `url(${images[current]})`;
-    visibleBg.classList.add('visible');
-
-    function switchBackground() {
+    function swapBackgrounds() {
+      bg1.classList.toggle('fade-out');
+      bg2.classList.toggle('fade-out');
       current = (current + 1) % images.length;
-      hiddenBg.style.backgroundImage = `url(${images[current]})`;
-      hiddenBg.classList.add('visible');
-      visibleBg.classList.remove('visible');
-      setTimeout(() => {
-        const temp = visibleBg;
-        visibleBg = hiddenBg;
-        hiddenBg = temp;
-      }, 2000);
+      next = (next + 1) % images.length;
+      if(bg1.classList.contains('fade-out')) {
+        bg1.style.backgroundImage = `url(${images[next]})`;
+      } else {
+        bg2.style.backgroundImage = `url(${images[next]})`;
+      }
     }
 
-    setInterval(switchBackground, 8000);
+    setInterval(swapBackgrounds, 8000);
 
-    const progressBar = document.getElementById('progress');
-    const statusElement = document.getElementById('status');
-    const substatusElement = document.getElementById('substatus');
-    const hintElement = document.getElementById('hint');
-    const playerCountElement = document.getElementById('player-count');
-    const mapNameElement = document.getElementById('map-name');
-    const serverTimeElement = document.getElementById('server-time');
-    const serverNameElement = document.getElementById('server-name');
-
-    const hints = [
-      "Нажмите F1 для открытия настроек",
-      "Нажмите F2 для внутриигрового магазина",
-      "Нажмите Q для меню действий"
-    ];
+    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+      serverNameElement.textContent = servername;
+      mapNameElement.textContent = mapname;
+      playerCountElement.textContent = `${Math.floor(Math.random() * maxplayers)}/${maxplayers}`;
+    }
 
     function SetStatusChanged(status) {
       statusElement.textContent = status;
@@ -175,8 +167,13 @@
       hintElement.textContent = hints[Math.floor(Math.random() * hints.length)];
     }, 5000);
 
+    setInterval(() => {
+      GameDetails("LOCAL", "url", "gm_construct", 32, "", "");
+    }, 3000);
+
     setInterval(updateServerTime, 1000);
     updateServerTime();
   </script>
 </body>
 </html>
+
