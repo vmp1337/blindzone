@@ -1,216 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ГАВНО ЕБАНОЕ - Loading</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Share Tech Mono', monospace;
-      background: black;
-      height: 100vh;
-      color: #c1c1c1;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .background-slideshow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    .background-slideshow img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
-    }
-
-    .overlay {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(2px);
-    }
-
-    .top-bar {
-      width: 100%;
-      background: rgba(10, 10, 10, 0.8);
-      padding: 10px 20px;
-      border-bottom: 1px solid #00ffee55;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: absolute;
-      top: 0;
-      z-index: 2;
-      animation: slideDown 1s ease-in-out;
-    }
-
-    .top-bar span {
-      color: #00ffee;
-    }
-
-    .center-box {
-      position: absolute;
-      top: 55%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 4em;
-      color: #00ffee;
-      text-shadow: 0 0 10px #00ffee;
-      margin-bottom: 20px;
-      animation: fadeIn 2s ease;
-    }
-
-    .info-panel {
-      background: rgba(20, 20, 20, 0.75);
-      padding: 20px;
-      border: 1px solid #00ffee44;
-      border-radius: 8px;
-      box-shadow: 0 0 12px rgba(0, 255, 238, 0.1);
-      animation: fadeIn 2.5s ease;
-    }
-
-    .info-panel p {
-      margin: 8px 0;
-    }
-
-    .loading-bar {
-      width: 300px;
-      height: 8px;
-      background: #333;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 20px auto 0;
-    }
-
-    .loading-bar-inner {
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, #00ffee, #005577);
-      animation: load 8s infinite;
-    }
-
-    .tips {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9em;
-      color: #888;
-      animation: flicker 4s infinite;
-    }
-
-    @keyframes load {
-      0% { width: 0%; }
-      50% { width: 100%; }
-      100% { width: 0%; }
-    }
-
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    @keyframes slideDown {
-      from { transform: translateY(-100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка сервера | Garry's Mod</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+        }
+    </style>
 </head>
-<body>
-  <div class="background-slideshow">
-    <img src="https://yourcdn.com/image1.jpg" class="slide" style="opacity: 1">
-    <img src="https://yourcdn.com/image2.jpg" class="slide">
-    <img src="https://yourcdn.com/image3.jpg" class="slide">
-  </div>
-
-  <div class="overlay"></div>
-
-  <div class="top-bar">
-    <div>Карта: <span id="mapName">даунтаун\бигсити\зомбитаун</span></div>
-    <div>Игроков: <span id="playerCount">3 милион / 128</span></div>
-    <div>Факт: <span id="funFact">гранулированные ключи.</span></div>
-  </div>
-
-  <div class="center-box">
-    <div class="logo">бдую КровьШед Локал</div>
-    <div class="info-panel">
-      <p>Добро пожаловас струйный аппарат.</p>
-      <p>IP сервера: <strong>майнкрафт.деньги</strong></p>
-      <p>Discord: <strong>discord.gg/onlyrichpeoplesNOBROKES</strong></p>
-      <p id="datetime"></p>
-      <div class="loading-bar">
-        <div class="loading-bar-inner"></div>
-      </div>
+<body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20 blur-sm"></div>
+    
+    <div class="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center">
+        <!-- Логотип сервера -->
+        <div class="mb-8 text-center">
+            <div class="text-6xl font-bold mb-2 glow-text">
+                <span class="text-red-600">Blood</span><span class="text-white">Shed</span>
+            </div>
+            <div class="text-3xl text-gray-300 font-bold tracking-wider" id="server-name">LOCAL</div>
+        </div>
+        
+        <!-- Прогресс бар -->
+        <div class="w-full bg-gray-700 rounded-full h-4 mb-6 overflow-hidden">
+            <div id="progress" class="progress-bar h-full bg-gradient-to-r from-red-600 to-red-800 rounded-full" style="width: 0%"></div>
+        </div>
+        
+        <!-- Статус загрузки -->
+        <div class="text-center mb-8">
+            <div id="status" class="text-xl font-semibold mb-2">Инициализация сервера...</div>
+            <div id="substatus" class="text-gray-300">Пожалуйста, подождите</div>
+        </div>
+        
+        <!-- Индикатор загрузки -->
+        <div class="flex space-x-2 mb-10">
+            <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div>
+            <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse" style="animation-delay: 0.2s"></div>
+            <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse" style="animation-delay: 0.4s"></div>
+        </div>
+        
+        <!-- Информация о сервере -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-center">
+            <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
+                <div class="text-red-600 mb-1"><i class="fas fa-users"></i> Игроки</div>
+                <div id="player-count" class="text-2xl font-bold">0/0</div>
+            </div>
+            <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
+                <div class="text-red-600 mb-1"><i class="fas fa-map"></i> Карта</div>
+                <div id="map-name" class="text-2xl font-bold">Неизвестно</div>
+            </div>
+            <div class="bg-gray-800 bg-opacity-70 p-4 rounded-lg">
+                <div class="text-red-600 mb-1"><i class="fas fa-clock"></i> Время</div>
+                <div id="server-time" class="text-2xl font-bold">00:00</div>
+            </div>
+        </div>
+        
+        <!-- Подсказки -->
+        <div class="mt-10 text-gray-400 text-sm text-center max-w-lg">
+            <div id="hint" class="italic">Нажмите F1 для открытия меню помощи</div>
+        </div>
     </div>
-  </div>
+    
+    <!-- Копирайт -->
+    <div class="absolute bottom-4 text-gray-500 text-sm">
+        © 2023 DarkRP Server | Все права защищены
+    </div>
 
-  <div class="tips" id="tips">ds./asawlююююююпомогите...</div>
+    <script>
+        const progressBar = document.getElementById('progress');
+        const statusElement = document.getElementById('status');
+        const substatusElement = document.getElementById('substatus');
+        const hintElement = document.getElementById('hint');
+        const playerCountElement = document.getElementById('player-count');
+        const mapNameElement = document.getElementById('map-name');
+        const serverTimeElement = document.getElementById('server-time');
+        const serverNameElement = document.getElementById('server-name');
 
-  <script>
-    const tips = [
-      "привет",
-      "дерись нахуй сука",
-      "дратся сука дерись",
-      "ывю хуйня",
-      "горючее"
-    ];
+        const hints = [
+            "Нажмите F1 для открытия меню помощи",
+            "Используйте /job для выбора профессии",
+            "Нажмите C для открытия инвентаря",
+            "Нажмите F4 для открытия меню администратора",
+            "Используйте /buy для покупки недвижимости"
+        ];
 
-    let tipIndex = 0;
-    setInterval(() => {
-      document.getElementById("tips").textContent = tips[tipIndex];
-      tipIndex = (tipIndex + 1) % tips.length;
-    }, 6000);
+        // GMod API: реальные данные
+        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+            serverNameElement.textContent = servername;
+            mapNameElement.textContent = mapname;
+            playerCountElement.textContent = `0/${maxplayers}`;
+        }
 
-    const dt = new Date();
-    document.getElementById("datetime").textContent = dt.toLocaleString();
+        function SetStatusChanged(status) {
+            statusElement.textContent = status;
+        }
 
-    const facts = [
-      "каждый гражданин полирует.",
-      "вльянсе запрещено жужелица.",
-      "помогите пожалуйста умоляю",
-      "джон",
-      "BloodshezZ,d - jочнь курец многа"
-    ];
-    let factIndex = 0;
-    setInterval(() => {
-      document.getElementById("funFact").textContent = facts[factIndex];
-      factIndex = (factIndex + 1) % facts.length;
-    }, 8000);
+        function SetFilesNeeded(needed) {
+            substatusElement.textContent = `Осталось файлов: ${needed}`;
+        }
 
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-    setInterval(() => {
-      slides[currentSlide].style.opacity = 0;
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].style.opacity = 1;
-    }, 10000);
-  </script>
+        function SetFilesTotal(total) {
+            substatusElement.textContent = `Всего файлов: ${total}`;
+        }
+
+        function DownloadingFile(fileName) {
+            substatusElement.textContent = `Загрузка: ${fileName}`;
+        }
+
+        function SetProgress(amount) {
+            progressBar.style.width = `${amount * 100}%`;
+        }
+
+        // Обновление времени
+        function updateServerTime() {
+            const now = new Date();
+            serverTimeElement.textContent =
+                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+        setInterval(updateServerTime, 1000);
+        updateServerTime();
+
+        // Смена подсказок каждые 5 сек
+        setInterval(() => {
+            const randomHint = hints[Math.floor(Math.random() * hints.length)];
+            hintElement.textContent = randomHint;
+        }, 5000);
+    </script>
 </body>
 </html>
+
