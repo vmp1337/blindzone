@@ -25,13 +25,13 @@
     inset: 0;
     background-size: cover;
     background-position: center;
-    opacity: 0.25;
+    opacity: 0;
     filter: blur(4px);
-    transition: opacity 1.5s ease-in-out;
+    transition: opacity 2s ease-in-out;
     z-index: 0;
   }
-  .bg-slider.fade-out {
-    opacity: 0;
+  .bg-slider.visible {
+    opacity: 0.25;
   }
 </style>
 </head>
@@ -104,33 +104,31 @@
       "img/5.png"
     ];
 
-    let current = 0, next = 1;
-    bg1.style.backgroundImage = `url(${images[current]})`;
-    bg2.style.backgroundImage = `url(${images[next]})`;
-    bg2.classList.add('fade-out');
+    let currentIndex = 0;
+    // Изначально показываем первую картинку на bg1, делаем её видимой
+    bg1.style.backgroundImage = `url(${images[currentIndex]})`;
+    bg1.classList.add('visible');
+    bg2.style.backgroundImage = '';
 
-    function swapBackgrounds() {
-      bg1.classList.toggle('fade-out');
-      bg2.classList.toggle('fade-out');
-      current = (current + 1) % images.length;
-      next = (next + 1) % images.length;
-      if(bg1.classList.contains('fade-out')) {
-        bg1.style.backgroundImage = `url(${images[next]})`;
-      } else {
-        bg2.style.backgroundImage = `url(${images[next]})`;
-      }
+    function crossfadeNext() {
+      const nextIndex = (currentIndex + 1) % images.length;
+      // Картинка для bg2
+      bg2.style.backgroundImage = `url(${images[nextIndex]})`;
+      bg2.classList.add('visible');
+      bg1.classList.remove('visible');
+
+      // Через 2 секунды (время перехода) поменяем bg1 и bg2 местами
+      setTimeout(() => {
+        // После окончания анимации меняем местами
+        bg1.style.backgroundImage = `url(${images[nextIndex]})`;
+        bg1.classList.add('visible');
+        bg2.classList.remove('visible');
+        bg2.style.backgroundImage = '';
+        currentIndex = nextIndex;
+      }, 2000);
     }
 
-    setInterval(swapBackgrounds, 8000);
-
-    // Закомментирована функция, чтобы НЕ менять текст serverName
-    /*
-    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
-      serverNameElement.textContent = servername;
-      mapNameElement.textContent = mapname;
-      playerCountElement.textContent = `0/${maxplayers}`;
-    }
-    */
+    setInterval(crossfadeNext, 8000);
 
     function SetStatusChanged(status) {
       statusElement.textContent = status;
@@ -167,3 +165,4 @@
   </script>
 </body>
 </html>
+
