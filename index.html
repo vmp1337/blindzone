@@ -7,39 +7,49 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-  @keyframes pulse {
-    0%,100% {opacity:1;}
-    50% {opacity:0.5;}
-  }
-  .animate-pulse {
-    animation: pulse 2s infinite;
-  }
-  .progress-bar {
-    transition: width 0.3s ease;
-  }
-  .glow-text {
-    text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background-color: #1a202c; /* tailwind gray-900 */
+    overflow: hidden;
   }
   .bg-slider {
-    position: absolute;
-    inset: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
     background-size: cover;
     background-position: center;
+    filter: blur(3px);
     opacity: 0;
-    filter: blur(4px);
     transition: opacity 2s ease-in-out;
     z-index: 0;
   }
   .bg-slider.visible {
     opacity: 0.25;
   }
+  /* Основной контейнер поверх фонов */
+  .content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+  .glow-text {
+    text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+  }
 </style>
 </head>
-<body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center overflow-hidden relative">
+<body>
+
   <div id="bg1" class="bg-slider"></div>
   <div id="bg2" class="bg-slider"></div>
 
-  <div class="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center">
+  <div class="content">
     <div class="mb-8 text-center">
       <div class="text-6xl font-bold mb-2 glow-text">
         <span class="text-red-600">Blood</span><span class="text-white">Shed</span>
@@ -76,25 +86,14 @@
       <div id="hint" class="italic">Нажмите F1 для открытия меню помощи</div>
     </div>
   </div>
-  <div class="absolute bottom-4 text-gray-500 text-sm">© 2025 BloodShed Local | У нас нет прав :(</div>
+
+  <div class="absolute bottom-4 text-gray-500 text-sm" style="z-index: 10;">
+    © 2025 BloodShed Local | У нас нет прав :(
+  </div>
 
   <script>
-    const progressBar = document.getElementById('progress');
-    const statusElement = document.getElementById('status');
-    const substatusElement = document.getElementById('substatus');
-    const hintElement = document.getElementById('hint');
-    const playerCountElement = document.getElementById('player-count');
-    const mapNameElement = document.getElementById('map-name');
-    const serverTimeElement = document.getElementById('server-time');
-    const serverNameElement = document.getElementById('server-name');
     const bg1 = document.getElementById('bg1');
     const bg2 = document.getElementById('bg2');
-
-    const hints = [
-      "Нажмите F1 для открытия настроек",
-      "Нажмите F2 для внутриигрового магазина",
-      "Нажмите Q для меню действий"
-    ];
 
     const images = [
       "img/1.png",
@@ -104,31 +103,52 @@
       "img/5.png"
     ];
 
-    let currentIndex = 0;
-    // Изначально показываем первую картинку на bg1, делаем её видимой
-    bg1.style.backgroundImage = `url(${images[currentIndex]})`;
-    bg1.classList.add('visible');
-    bg2.style.backgroundImage = '';
+    let current = 0;
+    let visibleBg = bg1; // как bg1 или bg2 — текущий видимый
+    let hiddenBg = bg2;
 
-    function crossfadeNext() {
-      const nextIndex = (currentIndex + 1) % images.length;
-      // Картинка для bg2
-      bg2.style.backgroundImage = `url(${images[nextIndex]})`;
-      bg2.classList.add('visible');
-      bg1.classList.remove('visible');
+    // Устанавливаем начальное состояние
+    visibleBg.style.backgroundImage = `url(${images[current]})`;
+    visibleBg.classList.add('visible');
 
-      // Через 2 секунды (время перехода) поменяем bg1 и bg2 местами
+    function switchBackground() {
+      // Следующая картинка
+      current = (current + 1) % images.length;
+
+      // Скрытый слой меняем картинку
+      hiddenBg.style.backgroundImage = `url(${images[current]})`;
+
+      // Начинаем переход: делаем скрытый слой видимым, а видимый — прозрачным
+      hiddenBg.classList.add('visible');
+      visibleBg.classList.remove('visible');
+
+      // Через 2 секунды (длительность transition) меняем ссылки местами
       setTimeout(() => {
-        // После окончания анимации меняем местами
-        bg1.style.backgroundImage = `url(${images[nextIndex]})`;
-        bg1.classList.add('visible');
-        bg2.classList.remove('visible');
-        bg2.style.backgroundImage = '';
-        currentIndex = nextIndex;
+        // Обмениваем переменные местами
+        const temp = visibleBg;
+        visibleBg = hiddenBg;
+        hiddenBg = temp;
       }, 2000);
     }
 
-    setInterval(crossfadeNext, 8000);
+    // Запускаем цикл смены каждые 8 секунд: 6 секунд показ + 2 секунды переход
+    setInterval(switchBackground, 8000);
+
+    // Остальной JS (таймер, прогресс, подсказки)
+    const progressBar = document.getElementById('progress');
+    const statusElement = document.getElementById('status');
+    const substatusElement = document.getElementById('substatus');
+    const hintElement = document.getElementById('hint');
+    const playerCountElement = document.getElementById('player-count');
+    const mapNameElement = document.getElementById('map-name');
+    const serverTimeElement = document.getElementById('server-time');
+    const serverNameElement = document.getElementById('server-name');
+
+    const hints = [
+      "Нажмите F1 для открытия настроек",
+      "Нажмите F2 для внутриигрового магазина",
+      "Нажмите Q для меню действий"
+    ];
 
     function SetStatusChanged(status) {
       statusElement.textContent = status;
@@ -165,4 +185,3 @@
   </script>
 </body>
 </html>
-
