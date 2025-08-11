@@ -131,10 +131,16 @@
 
     setInterval(swapBackgrounds, 8000);
 
-    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+    // Эта функция вызывается игрой и передает реальные данные
+    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode, playersnow) {
       serverNameElement.textContent = servername;
       mapNameElement.textContent = mapname;
-      playerCountElement.textContent = `${Math.floor(Math.random() * maxplayers)}/${maxplayers}`;
+      // Заменяем рандом на реальные данные игроков
+      if (typeof playersnow !== "undefined") {
+        playerCountElement.textContent = `${playersnow}/${maxplayers}`;
+      } else {
+        playerCountElement.textContent = `0/${maxplayers}`;
+      }
     }
 
     function SetStatusChanged(status) {
@@ -166,10 +172,6 @@
     setInterval(() => {
       hintElement.textContent = hints[Math.floor(Math.random() * hints.length)];
     }, 5000);
-
-    setInterval(() => {
-      GameDetails("LOCAL", "url", "gm_construct", 32, "", "");
-    }, 3000);
 
     setInterval(updateServerTime, 1000);
     updateServerTime();
